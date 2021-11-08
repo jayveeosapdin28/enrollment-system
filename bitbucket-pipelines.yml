@@ -1,0 +1,20 @@
+image: composer:2.0
+
+
+pipelines:
+  default:
+    - parallel:
+        - step:
+            name: Enrollment
+            script:
+              - apt-get update && apt-get install -y unzip
+              - apt-get install openssh-client
+              - ssh enrollment-staging.minscat.edu.ph 'bash -s' < execute.sh
+            caches:
+              - composer
+        - step:
+            name: Lint
+            script:
+              - composer install
+            caches:
+              - composer
